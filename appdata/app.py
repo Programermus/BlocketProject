@@ -16,7 +16,7 @@ logging.getLogger('apscheduler').setLevel(logging.DEBUG)
 application = Flask(__name__)
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=start_scrape_job, trigger="interval", seconds=600)
+scheduler.add_job(func=start_scrape_job, trigger="interval", seconds=120)
 scheduler.start()
 
 # Shut down the scheduler when exiting the app
