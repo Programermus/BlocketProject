@@ -48,6 +48,38 @@ def get_old_links(db):
         old_links.append(link['link'])
     return old_links
 
+def get_old_adds(days_old, db):
+    date = datetime.today() - timedelta(days=days_old)
+    date = date.strftime('%Y-%m-%d')
+    cur = db.blocket.find({
+        "time": {"$regex": date}
+        })
+    links = []
+    for item in cur:
+        links.append(item["link"])
+    return links
+
+def check_sold_job():
+    #wierd way of checking if conection is up
+    db, client = connect_to_db(MONGO_URI)
+    try:
+        client.admin.command("ismaster")
+        #get all adds from the day 20 days ago
+        links = get_old_adds(0, db)
+        print(links, file=sys.stderr)
+        for link in links:
+            print(link, file=sys.stderr)
+            sold = check_if_removed(link)
+            db.blocket.update_one(
+                {"link":link},
+                {"$set" : {"sold":str(sold)}})
+            log = str("is sold? " + link + " : " + str(sold))
+            print(log, file=sys.stderr)
+    except ConnectionFailure as e:
+        print(str(e), file=sys.stderr)
+    client.close()
+    return
+
 def start_scrape_job():
     print("Running job", file=sys.stderr)
     global GLOBAL_COUNT

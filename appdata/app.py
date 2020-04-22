@@ -7,7 +7,7 @@ import pymongo
 from flask import Flask, request, jsonify, render_template
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
-from datafunctions import start_scrape_job
+from datafunctions import start_scrape_job, check_sold_job
 from api import api_summary
 
 logging.basicConfig()
@@ -17,6 +17,7 @@ application = Flask(__name__)
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=start_scrape_job, trigger="interval", seconds=120)
+scheduler.add_job(func=check_sold_job, trigger="interval", days=1)
 scheduler.start()
 
 # Shut down the scheduler when exiting the app

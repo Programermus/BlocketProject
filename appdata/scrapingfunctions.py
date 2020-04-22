@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 import re
 from bs4 import BeautifulSoup
@@ -57,3 +57,15 @@ def get_item_info(blocket_link):
         print("No price or description information.")
         print(e)
         return
+
+def check_if_removed(blocket_url):
+    page = requests.get(blocket_url)
+    soup = BeautifulSoup(page.content, features='html.parser')
+    add_removed_banner = soup.find('div', class_=re.compile('TextHeadline2__TextHeadline2Wrapper-sc-1dy11d7-0(.*)'))
+    if add_removed_banner is None:
+        return False
+    removal_text = soup.find('div', class_=re.compile('TextHeadline2__TextHeadline2Wrapper-sc-1dy11d7-0(.*)')).text
+    if "Hittade inte annonsen" in removal_text:
+        return True
+    else:
+        return False
