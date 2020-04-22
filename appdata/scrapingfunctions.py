@@ -10,7 +10,7 @@ def get_adds_on_page_no(page_no):
     soup = BeautifulSoup(resp.content, features='html.parser')
 
     #find all links and reformat them so they are searchable, store in list
-    elements = soup.find_all('a', class_=lambda val: val.startswith('Link-sc-139ww1j-0 styled__StyledTitleLink-sc-1kpvi4z-8'))
+    elements = soup.find_all('a', class_=lambda val: val.startswith('Link-sc-139ww1j-0 styled__StyledTitleLink-sc-1kpvi4z-'))
     for url in elements:
         url = 'http://www.blocket.se' + str(url['href'])
         urls.append(url)

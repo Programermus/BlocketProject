@@ -48,7 +48,6 @@ def get_old_links(db):
         old_links.append(link['link'])
     return old_links
 
-
 def start_scrape_job():
     print("Running job", file=sys.stderr)
     global GLOBAL_COUNT
